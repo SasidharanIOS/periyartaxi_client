@@ -18,46 +18,34 @@ import Slide14 from "./components/slides/Slide14";
 import Slide15 from "./components/slides/Slide15";
 
 const slides = [
-  Slide01,
-  Slide02,
-  Slide03,
-  Slide04,
-  Slide05,
-  Slide06,
-  Slide07,
-  Slide08,
-  Slide09,
-  Slide11,
-  Slide12,
-  Slide13,
-  Slide14,
-  Slide15,
-  Slide10,
+  Slide01, Slide02, Slide03, Slide04, Slide05,
+  Slide06, Slide07, Slide08, Slide09, Slide11,
+  Slide12, Slide13, Slide14, Slide15, Slide10,
 ];
 
 const slideVariants = {
   enter: (dir) => ({
     x: dir > 0 ? "100%" : "-100%",
     opacity: 0,
-    scale: 0.96,
+    scale: 0.97,
   }),
   center: {
     x: 0,
     opacity: 1,
     scale: 1,
     transition: {
-      x: { type: "spring", stiffness: 280, damping: 28 },
-      opacity: { duration: 0.25 },
-      scale: { duration: 0.3 },
+      x: { type: "spring", stiffness: 300, damping: 30 },
+      opacity: { duration: 0.22 },
+      scale: { duration: 0.28 },
     },
   },
   exit: (dir) => ({
     x: dir < 0 ? "100%" : "-100%",
     opacity: 0,
-    scale: 0.96,
+    scale: 0.97,
     transition: {
-      x: { type: "spring", stiffness: 280, damping: 28 },
-      opacity: { duration: 0.2 },
+      x: { type: "spring", stiffness: 300, damping: 30 },
+      opacity: { duration: 0.18 },
     },
   }),
 };
@@ -65,6 +53,7 @@ const slideVariants = {
 export default function App() {
   const [[current, direction], setSlide] = useState([0, 0]);
   const [touchStartX, setTouchStartX] = useState(null);
+  const [touchStartY, setTouchStartY] = useState(null);
 
   const goTo = useCallback(
     (index) => {
@@ -84,27 +73,29 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === "ArrowRight" || e.key === " ") {
-        e.preventDefault();
-        next();
-      }
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        prev();
-      }
+      if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); next(); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [next, prev]);
 
-  const handleTouchStart = (e) => setTouchStartX(e.touches[0].clientX);
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.touches[0].clientX);
+    setTouchStartY(e.touches[0].clientY);
+  };
 
   const handleTouchEnd = (e) => {
     if (touchStartX === null) return;
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (diff > 60) next();
-    else if (diff < -60) prev();
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    const dy = Math.abs(touchStartY - e.changedTouches[0].clientY);
+    // Only trigger slide if horizontal swipe is dominant
+    if (Math.abs(dx) > 55 && Math.abs(dx) > dy * 1.5) {
+      if (dx > 0) next();
+      else prev();
+    }
     setTouchStartX(null);
+    setTouchStartY(null);
   };
 
   const Slide = slides[current];

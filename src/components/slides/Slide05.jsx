@@ -2,30 +2,21 @@ import React from "react";
 import { motion } from "framer-motion";
 import useCountUp from "../../hooks/useCountUp";
 
-/* ─── Light Theme Tokens ─── */
 const LT = {
-  bg:        "#f5f3ee",
-  surface:   "#ffffff",
-  text:      "#1a1814",
-  textMuted: "#6b6860",
-  textFaint: "#b0ada8",
-  amber:     "#d97706",
-  border:    "rgba(0,0,0,0.07)",
-  shadowMd:  "0 8px 28px rgba(0,0,0,0.10)",
-  shadowLg:  "0 16px 44px rgba(0,0,0,0.13)",
+  bg: "#f5f3ee", surface: "#ffffff",
+  text: "#1a1814", textMuted: "#6b6860", textFaint: "#b0ada8",
+  amber: "#d97706", border: "rgba(0,0,0,0.07)",
+  shadowMd: "0 8px 28px rgba(0,0,0,0.10)",
+  shadowLg: "0 16px 44px rgba(0,0,0,0.13)",
 };
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
 };
-
 const item = {
   hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1, y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-  },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
 };
 
 const CARDS = [
@@ -79,7 +70,7 @@ const CARDS = [
   },
 ];
 
-function StatCard({ img, fallbackImg, value, suffix, label, sub, accent, accentBg, fallback, objectPosition }) {
+function StatCard({ img, fallbackImg, value, suffix, label, sub, accent, accentBg, fallback, objectPosition, isMobile }) {
   const count = useCountUp(value, 1600);
 
   const handleError = (e) => {
@@ -88,107 +79,85 @@ function StatCard({ img, fallbackImg, value, suffix, label, sub, accent, accentB
       return;
     }
     e.currentTarget.style.display = "none";
-    const fallbackEl = e.currentTarget.parentElement.querySelector(".img-fallback");
-    if (fallbackEl) fallbackEl.style.display = "flex";
+    const fb = e.currentTarget.parentElement.querySelector(".img-fallback");
+    if (fb) fb.style.display = "flex";
   };
 
-  return (
-    <motion.div
-      variants={item}
-      whileHover={{ y: -5, scale: 1.015 }}
-      className="relative rounded-[22px] overflow-hidden h-full flex flex-col"
-      style={{
-        background: LT.surface,
-        border: `1.5px solid ${accent}22`,
-        boxShadow: LT.shadowMd,
-        transition: "box-shadow 0.3s ease, border-color 0.3s ease",
-      }}
-    >
-      {/* ── Image — top 72% ── */}
-      <div className="relative overflow-hidden flex-shrink-0" style={{ height: "72%" }}>
-        <img
-          src={img}
-          alt={label}
-          loading="lazy"
-          decoding="async"
-          onError={handleError}
-          className="w-full h-full object-cover"
-          style={{
-            objectPosition: objectPosition || "center center",
-            filter: "brightness(0.92) saturate(1.05)",
-          }}
-        />
+  /* ── Mobile: horizontal card (image left, text right) ── */
+  if (isMobile) {
+    return (
+      <motion.div variants={item}
+        className="relative rounded-2xl overflow-hidden flex flex-row"
+        style={{
+          background: LT.surface,
+          border: `1.5px solid ${accent}22`,
+          boxShadow: LT.shadowMd,
+          height: "80px",
+        }}>
+        {/* Image — left 40% */}
+        <div className="relative overflow-hidden flex-shrink-0" style={{ width: "40%" }}>
+          <img src={img} alt={label} loading="lazy" decoding="async" onError={handleError}
+            className="w-full h-full object-cover"
+            style={{ objectPosition: objectPosition || "center", filter: "brightness(0.92) saturate(1.05)" }} />
+          <div className="img-fallback hidden absolute inset-0 items-center justify-center px-2 text-center text-xs font-bold"
+            style={{ background: `linear-gradient(135deg, ${accent}15, ${accent}05)`, color: accent }}>
+            {fallback}
+          </div>
+          <div className="absolute inset-0 pointer-events-none"
+            style={{ background: "linear-gradient(to right, transparent 55%, rgba(255,255,255,0.12) 100%)" }} />
+          {/* Count badge */}
+          <div className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full font-display leading-none"
+            style={{ fontSize: "17px", background: "rgba(255,255,255,0.92)", backdropFilter: "blur(6px)", color: accent, border: `1.5px solid ${accent}35` }}>
+            {count}{suffix}
+          </div>
+        </div>
+        {/* Text — right 60% */}
+        <div className="flex flex-col justify-center flex-1 px-3"
+          style={{ borderLeft: `3px solid ${accent}` }}>
+          <div className="font-body font-black leading-tight"
+            style={{ fontSize: "13px", color: LT.text }}>
+            {label}
+          </div>
+          <span className="font-body font-semibold px-1.5 py-0.5 rounded-full mt-1 inline-block w-fit"
+            style={{ fontSize: "10px", background: accentBg, color: accent }}>
+            {sub}
+          </span>
+          <div className="w-6 h-[2.5px] rounded-full mt-1.5" style={{ background: accent }} />
+        </div>
+      </motion.div>
+    );
+  }
 
-        {/* Text fallback */}
-        <div
-          className="img-fallback hidden absolute inset-0 items-center justify-center px-4 text-center"
-          style={{
-            background: `linear-gradient(135deg, ${accent}15 0%, ${accent}05 100%)`,
-            color: accent,
-            fontWeight: 800,
-            fontSize: "clamp(18px, 2vw, 28px)",
-          }}
-        >
+  /* ── Desktop: original vertical card ── */
+  return (
+    <motion.div variants={item} whileHover={{ y: -5, scale: 1.015 }}
+      className="relative rounded-[22px] overflow-hidden h-full flex flex-col"
+      style={{ background: LT.surface, border: `1.5px solid ${accent}22`, boxShadow: LT.shadowMd, transition: "box-shadow 0.3s, border-color 0.3s" }}>
+      <div className="relative overflow-hidden flex-shrink-0" style={{ height: "72%" }}>
+        <img src={img} alt={label} loading="lazy" decoding="async" onError={handleError}
+          className="w-full h-full object-cover"
+          style={{ objectPosition: objectPosition || "center", filter: "brightness(0.92) saturate(1.05)" }} />
+        <div className="img-fallback hidden absolute inset-0 items-center justify-center px-4 text-center"
+          style={{ background: `linear-gradient(135deg, ${accent}15, ${accent}05)`, color: accent, fontWeight: 800, fontSize: "clamp(18px, 2vw, 28px)" }}>
           {fallback}
         </div>
-
-        {/* ✅ Only thin dark scrim at bottom for count badge contrast */}
-        <div
-          className="absolute bottom-0 left-0 right-0 pointer-events-none"
-          style={{
-            height: "45%",
-            background: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.42) 100%)",
-          }}
-        />
-
-        {/* Count badge — top right, white pill */}
-        <div
-          className="absolute top-2.5 right-2.5 px-3 py-1 rounded-full font-display leading-none z-10"
-          style={{
-            fontSize: "clamp(24px, 3.4vw, 44px)",
-            background: "rgba(255,255,255,0.92)",
-            backdropFilter: "blur(8px)",
-            color: accent,
-            border: `1.5px solid ${accent}35`,
-            boxShadow: `0 4px 14px ${accent}25`,
-          }}
-        >
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
+          style={{ height: "45%", background: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.42) 100%)" }} />
+        <div className="absolute top-2.5 right-2.5 px-3 py-1 rounded-full font-display leading-none z-10"
+          style={{ fontSize: "clamp(24px, 3.4vw, 44px)", background: "rgba(255,255,255,0.92)", backdropFilter: "blur(8px)", color: accent, border: `1.5px solid ${accent}35`, boxShadow: `0 4px 14px ${accent}25` }}>
           {count}{suffix}
         </div>
       </div>
-
-      {/* ── Label strip — bottom 28%, solid white ── */}
-      <div
-        className="flex flex-col justify-center flex-1 px-4 md:px-5 py-3"
-        style={{ borderTop: `2.5px solid ${accent}20` }}
-      >
-        {/* Accent rule */}
-        <div
-          className="w-8 h-[3px] rounded-full mb-2"
-          style={{ background: accent }}
-        />
-
-        {/* Label */}
-        <div
-          className="font-body font-black leading-[1.05]"
-          style={{
-            fontSize: "clamp(15px, 2vw, 26px)",
-            color: LT.text,
-          }}
-        >
+      <div className="flex flex-col justify-center flex-1 px-4 md:px-5 py-3"
+        style={{ borderTop: `2.5px solid ${accent}20` }}>
+        <div className="w-8 h-[3px] rounded-full mb-2" style={{ background: accent }} />
+        <div className="font-body font-black leading-[1.05]"
+          style={{ fontSize: "clamp(15px, 2vw, 26px)", color: LT.text }}>
           {label}
         </div>
-
-        {/* Sub — accent colored pill */}
         <div className="mt-1.5 flex items-center gap-1.5">
-          <span
-            className="font-body font-semibold px-2 py-0.5 rounded-full"
-            style={{
-              fontSize: "clamp(9px, 1.1vw, 13px)",
-              background: accentBg,
-              color: accent,
-            }}
-          >
+          <span className="font-body font-semibold px-2 py-0.5 rounded-full"
+            style={{ fontSize: "clamp(9px, 1.1vw, 13px)", background: accentBg, color: accent }}>
             {sub}
           </span>
         </div>
@@ -199,121 +168,74 @@ function StatCard({ img, fallbackImg, value, suffix, label, sub, accent, accentB
 
 export default function Slide05() {
   return (
-    <div
-      className="w-full h-full relative overflow-hidden flex flex-col"
-      style={{ background: LT.bg }}
-    >
-      {/* Ambient blobs */}
+    <div className="w-full h-full relative overflow-hidden flex flex-col" style={{ background: LT.bg }}>
+      {/* Blobs */}
       <div className="absolute top-[-12%] right-[-8%] w-[480px] h-[480px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(217,119,6,0.09) 0%, transparent 70%)", filter: "blur(70px)" }}
-      />
+        style={{ background: "radial-gradient(circle, rgba(217,119,6,0.09) 0%, transparent 70%)", filter: "blur(70px)" }} />
       <div className="absolute bottom-[-12%] left-[-6%] w-[440px] h-[440px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(37,99,235,0.07) 0%, transparent 70%)", filter: "blur(65px)" }}
-      />
-      <div className="absolute top-[35%] left-[38%] w-[360px] h-[360px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(13,148,136,0.06) 0%, transparent 70%)", filter: "blur(55px)" }}
-      />
+        style={{ background: "radial-gradient(circle, rgba(37,99,235,0.07) 0%, transparent 70%)", filter: "blur(65px)" }} />
+      <div className="absolute inset-0 opacity-40 pointer-events-none"
+        style={{ backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
 
-      {/* Dot pattern */}
-      <div
-        className="absolute inset-0 opacity-40 pointer-events-none"
-        style={{
-          backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-
-      {/* ── Header ── */}
-      <motion.div
-        initial={{ opacity: 0, y: -18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45 }}
+      {/* HEADER */}
+      <motion.div initial={{ opacity: 0, y: -18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}
         className="flex-shrink-0 px-4 md:px-6 pt-4 md:pt-5 pb-2"
-        style={{
-          borderBottom: `1px solid rgba(217,119,6,0.12)`,
-          background: "linear-gradient(180deg, rgba(217,119,6,0.05) 0%, transparent 100%)",
-        }}
-      >
+        style={{ borderBottom: "1px solid rgba(217,119,6,0.12)", background: "linear-gradient(180deg, rgba(217,119,6,0.05) 0%, transparent 100%)" }}>
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0">
-            {/* Pill label */}
             <div className="inline-flex items-center gap-2 mb-1.5">
-              <div className="h-[2px] w-6 rounded" style={{ background: LT.amber + "88" }} />
-              <p
-                className="font-accent uppercase font-semibold tracking-[5px]"
-                style={{ fontSize: "clamp(10px, 1.1vw, 13px)", color: LT.amber }}
-              >
+              <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "88" }} />
+              <p className="font-accent uppercase font-semibold tracking-[5px]"
+                style={{ fontSize: "clamp(10px, 1.1vw, 13px)", color: LT.amber }}>
                 Bread &amp; Butter
               </p>
-              <div className="h-[2px] w-6 rounded" style={{ background: LT.amber + "88" }} />
+              <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "88" }} />
             </div>
-
-            {/* Heading */}
-            <h2
-              className="font-display leading-[0.92] whitespace-nowrap"
-              style={{ fontSize: "clamp(34px, 5.8vw, 80px)", color: LT.text }}
-            >
+            <h2 className="font-display leading-[0.92]"
+              style={{ fontSize: "clamp(26px, 5.2vw, 80px)", color: LT.text }}>
               CORE{" "}
-              <span style={{ WebkitTextStroke: `2.5px ${LT.amber}`, color: "transparent" }}>
-                SERVICE
-              </span>{" "}
+              <span style={{ WebkitTextStroke: `2px ${LT.amber}`, color: "transparent" }}>SERVICE</span>{" "}
               CAPACITY
             </h2>
-
-            {/* Underline */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
+            <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
               transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
-              className="w-16 h-[3.5px] rounded-full mt-2 origin-left"
-              style={{ background: `linear-gradient(90deg, ${LT.amber}, transparent)` }}
-            />
+              className="w-14 h-[3px] rounded-full mt-1.5 origin-left"
+              style={{ background: `linear-gradient(90deg, ${LT.amber}, transparent)` }} />
           </div>
-
           <div className="hidden md:flex items-center gap-2 mb-1 flex-shrink-0">
-            <div className="w-10 h-0.5 rounded" style={{ background: LT.amber + "60" }} />
-            <span
-              className="font-body font-medium"
-              style={{ fontSize: "clamp(12px, 1vw, 14px)", color: LT.textMuted }}
-            >
+            <div className="w-8 h-0.5 rounded" style={{ background: LT.amber + "60" }} />
+            <span className="font-body font-medium" style={{ fontSize: "clamp(12px, 1vw, 14px)", color: LT.textMuted }}>
               Periyar Taxi Fleet
             </span>
           </div>
         </div>
       </motion.div>
 
-      {/* ── 3×2 Card Grid ── */}
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="flex-1 min-h-0 px-4 md:px-6 py-3 grid grid-cols-3 gap-3 md:gap-4"
-        style={{ gridTemplateRows: "1fr 1fr" }}
-      >
+      {/* ── DESKTOP: 3×2 grid ── */}
+      <motion.div variants={container} initial="hidden" animate="show"
+        className="hidden md:grid md:grid-cols-3 flex-1 min-h-0 px-5 lg:px-6 py-3 gap-3 lg:gap-4"
+        style={{ gridTemplateRows: "1fr 1fr" }}>
         {CARDS.map((card, i) => (
-          <StatCard key={i} {...card} />
+          <StatCard key={i} {...card} isMobile={false} />
         ))}
       </motion.div>
 
-      {/* ── Footer note ── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.65, duration: 0.4 }}
+      {/* ── MOBILE: vertical list of horizontal cards ── */}
+      <motion.div variants={container} initial="hidden" animate="show"
+        className="md:hidden flex-1 overflow-y-auto no-scrollbar px-3 py-3 flex flex-col gap-2.5">
+        {CARDS.map((card, i) => (
+          <StatCard key={i} {...card} isMobile={true} />
+        ))}
+      </motion.div>
+
+      {/* FOOTER */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.65, duration: 0.4 }}
         className="flex-shrink-0 px-4 md:px-6 pb-3"
-        style={{ borderTop: `1px solid rgba(217,119,6,0.10)`, paddingTop: "8px" }}
-      >
+        style={{ borderTop: "1px solid rgba(217,119,6,0.10)", paddingTop: "7px" }}>
         <div className="flex items-center gap-2">
-          <div
-            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-            style={{ backgroundColor: LT.amber }}
-          />
-          <p
-            className="font-body"
-            style={{ fontSize: "clamp(11px, 1vw, 13px)", color: LT.textMuted }}
-          >
-            Valet parking: owners hand over the car to trained staff in crowded
-            areas for safe parking and smooth vehicle return.
+          <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: LT.amber }} />
+          <p className="font-body" style={{ fontSize: "clamp(10px, 1vw, 13px)", color: LT.textMuted }}>
+            Valet parking: owners hand over the car to trained staff in crowded areas for safe parking and smooth vehicle return.
           </p>
         </div>
       </motion.div>
