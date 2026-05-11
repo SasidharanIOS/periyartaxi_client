@@ -20,7 +20,7 @@ import Slide15 from "./components/slides/Slide15";
 const slides = [
   Slide01, Slide02, Slide03, Slide04, Slide05,
   Slide06, Slide07, Slide08, Slide09, Slide11,
-  Slide12, Slide13, Slide14, Slide15, Slide10,
+  Slide12, Slide13, Slide14, Slide10,
 ];
 
 const slideVariants = {
