@@ -52,7 +52,7 @@ const contacts = [
   },
 ];
 
-const services = ["Corporate Contracts","Event Transportation","Airport Trips","Bulk Bookings","Monthly Services","Acting Drivers"];
+const services   = ["Corporate Contracts","Event Transportation","Airport Trips","Bulk Bookings","Monthly Services","Acting Drivers"];
 const tagAccents = ["#d97706","#16a34a","#2563eb","#dc2626","#7c3aed","#0d9488"];
 const tagBgs     = ["#fef3c7","#dcfce7","#dbeafe","#fee2e2","#ede9fe","#ccfbf1"];
 
@@ -71,14 +71,15 @@ export default function Slide10() {
         className="relative z-10 w-full flex flex-col px-4 md:px-8 py-3 md:py-5"
         style={{ gap: "clamp(6px,1.2vh,16px)" }}>
 
-        {/* Header */}
+        {/* ── Header ── */}
         <motion.div variants={item} className="flex items-center justify-center gap-2 flex-shrink-0">
           <FaTaxi className="flex-shrink-0" style={{ fontSize: "clamp(24px,4vw,46px)", color: LT.amber }} />
           <div>
+            {/* ✅ "US" solid amber — clear & visible */}
             <h2 className="font-display leading-none"
               style={{ fontSize: "clamp(34px,7vw,96px)", color: LT.text }}>
               CONTACT{" "}
-              <span style={{ WebkitTextStroke: `2px ${LT.amber}`, color: "transparent" }}>US</span>
+              <span style={{ color: LT.amber }}>US</span>
             </h2>
             <p className="font-body font-semibold leading-tight"
               style={{ fontSize: "clamp(9px,1.3vw,15px)", color: LT.textMuted }}>
@@ -91,7 +92,9 @@ export default function Slide10() {
         <motion.div variants={item} className="w-full rounded-full flex-shrink-0"
           style={{ height: "1.5px", background: `linear-gradient(90deg, transparent, ${LT.amber}50, transparent)` }} />
 
-        {/* ── Desktop: side-by-side ── */}
+        {/* ══════════════════════════════════════
+            DESKTOP: side-by-side — UNCHANGED
+            ══════════════════════════════════════ */}
         <div className="hidden md:grid grid-cols-2 gap-5 flex-1 min-h-0">
           {/* Left: contacts */}
           <motion.div variants={item} className="flex flex-col gap-2.5">
@@ -115,17 +118,23 @@ export default function Slide10() {
               </motion.a>
             ))}
           </motion.div>
-          {/* Right: CTA */}
+
+          {/* Right: CTA + Services */}
           <motion.div variants={item} className="flex flex-col gap-3">
             <CTAPanel />
             <ServicesPanel />
           </motion.div>
         </div>
 
-        {/* ── Mobile: stacked layout ── */}
-        <div className="flex md:hidden flex-col flex-1 min-h-0" style={{ gap: "clamp(6px,2vw,10px)" }}>
-          {/* Contact list — compact */}
-          <motion.div variants={item} className="flex flex-col gap-1.5">
+        {/* ══════════════════════════════════════
+            MOBILE: scrollable stacked layout
+            ══════════════════════════════════════ */}
+        <div
+          className="flex md:hidden flex-col flex-1 min-h-0 overflow-y-auto no-scrollbar"
+          style={{ gap: 10, WebkitOverflowScrolling: "touch" }}
+        >
+          {/* Contact cards */}
+          <motion.div variants={item} className="flex flex-col gap-2 flex-shrink-0">
             {contacts.map((c, i) => (
               <motion.a key={i} href={c.link} target="_blank" rel="noopener noreferrer"
                 whileTap={{ scale: 0.97 }}
@@ -142,52 +151,67 @@ export default function Slide10() {
                   <div className="font-body font-bold leading-tight truncate"
                     style={{ fontSize: "clamp(11px,3.2vw,14px)", color: LT.text }}>{c.value}</div>
                 </div>
-                <div className="flex-shrink-0 font-bold" style={{ color: c.accent + "80" }}>›</div>
+                <div className="flex-shrink-0 font-bold text-base" style={{ color: c.accent + "80" }}>›</div>
               </motion.a>
             ))}
           </motion.div>
 
-          {/* CTA buttons row */}
+          {/* CTA dark card */}
           <motion.div variants={item}
-            className="rounded-2xl flex flex-col items-center justify-center py-3 px-4 relative overflow-hidden flex-shrink-0"
+            className="flex-shrink-0 rounded-2xl flex flex-col items-center justify-center py-4 px-4 relative overflow-hidden"
             style={{ background: LT.text, boxShadow: LT.shadowLg }}>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-28 rounded-full pointer-events-none"
+              style={{ background: `${LT.amber}12`, filter: "blur(36px)" }} />
             <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
               style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
-            <p className="font-accent uppercase tracking-[4px] relative z-10"
-              style={{ fontSize: 10, color: `${LT.amber}99` }}>Available 24 / 7</p>
-            <div className="font-display leading-none my-1 relative z-10"
-              style={{ fontSize: "clamp(26px,7vw,44px)", color: LT.amber, filter: `drop-shadow(0 0 16px ${LT.amber}50)` }}>
+            <p className="font-accent uppercase tracking-[4px] relative z-10 mb-0.5"
+              style={{ fontSize: 10, color: `${LT.amber}99` }}>
+              Available 24 / 7
+            </p>
+            <div className="font-display leading-none relative z-10"
+              style={{ fontSize: "clamp(28px,8vw,46px)", color: LT.amber, filter: `drop-shadow(0 0 16px ${LT.amber}50)` }}>
               80123 57078
             </div>
-            <div className="flex gap-2 mt-2 relative z-10">
+            <p className="font-body relative z-10 mt-0.5 mb-3"
+              style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>
+              Call or WhatsApp anytime
+            </p>
+            <div className="flex gap-2.5 relative z-10">
               <motion.a href="tel:8012357078" whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center gap-1.5 rounded-full font-body font-black"
-                style={{ background: `linear-gradient(135deg, ${LT.amber}, #f59e0b)`, color: "#fff", padding: "8px 20px", fontSize: 12, textDecoration: "none", boxShadow: `0 4px 14px ${LT.amber}50` }}>
+                style={{ background: `linear-gradient(135deg, ${LT.amber}, #f59e0b)`, color: "#fff", padding: "9px 22px", fontSize: 12, textDecoration: "none", boxShadow: `0 4px 14px ${LT.amber}50` }}>
                 <MdPhone size={15} /> CALL NOW
               </motion.a>
               <motion.a href="https://wa.me/918012357078" target="_blank" rel="noopener noreferrer"
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center gap-1.5 rounded-full font-body font-bold text-white"
-                style={{ background: "#16a34a", padding: "8px 18px", fontSize: 12, textDecoration: "none", boxShadow: "0 4px 14px rgba(22,163,74,0.35)" }}>
+                style={{ background: "#16a34a", padding: "9px 20px", fontSize: 12, textDecoration: "none", boxShadow: "0 4px 14px rgba(22,163,74,0.35)" }}>
                 <FaWhatsapp size={14} /> WHATSAPP
               </motion.a>
             </div>
           </motion.div>
 
           {/* Services tags */}
-          <motion.div variants={item} className="rounded-2xl px-3 py-2.5 flex-shrink-0"
+          <motion.div variants={item}
+            className="flex-shrink-0 rounded-2xl px-3 py-3"
             style={{ background: LT.surface, border: `1.5px solid ${LT.amber}22`, boxShadow: LT.shadowMd }}>
-            <p className="font-accent uppercase tracking-[4px] font-semibold mb-1.5"
-              style={{ fontSize: 9, color: LT.amber }}>We Handle</p>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-3 h-[2px] rounded" style={{ background: LT.amber + "80" }} />
+              <p className="font-accent uppercase tracking-[4px] font-semibold"
+                style={{ fontSize: 9, color: LT.amber }}>We Handle</p>
+            </div>
             <div className="flex flex-wrap gap-1.5">
               {services.map((s, i) => (
                 <span key={s} className="font-body font-semibold rounded-full"
-                  style={{ background: tagBgs[i % tagBgs.length], border: `1px solid ${tagAccents[i % tagAccents.length]}28`, color: tagAccents[i % tagAccents.length], padding: "3px 10px", fontSize: 10 }}>
+                  style={{ background: tagBgs[i % tagBgs.length], border: `1px solid ${tagAccents[i % tagAccents.length]}28`, color: tagAccents[i % tagAccents.length], padding: "4px 11px", fontSize: 10 }}>
                   {s}
                 </span>
               ))}
             </div>
           </motion.div>
+
+          {/* Bottom padding for scroll breathing room */}
+          <div className="flex-shrink-0 h-2" />
         </div>
 
         {/* Footer */}
@@ -204,7 +228,7 @@ export default function Slide10() {
   );
 }
 
-/* ── Extracted Desktop CTA & Services sub-components ── */
+/* ── Desktop sub-components — UNCHANGED ── */
 function CTAPanel() {
   return (
     <div className="flex-1 rounded-2xl flex flex-col items-center justify-center text-center px-5 py-5 relative overflow-hidden"

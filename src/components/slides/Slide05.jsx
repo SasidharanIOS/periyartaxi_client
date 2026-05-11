@@ -83,11 +83,11 @@ function StatCard({ img, fallbackImg, value, suffix, label, sub, accent, accentB
     if (fb) fb.style.display = "flex";
   };
 
-  /* ── Mobile: horizontal card (image left, text right) ── */
+  /* ── Mobile: horizontal card ── */
   if (isMobile) {
     return (
       <motion.div variants={item}
-        className="relative rounded-2xl overflow-hidden flex flex-row"
+        className="relative rounded-2xl overflow-hidden flex flex-row flex-shrink-0"
         style={{
           background: LT.surface,
           border: `1.5px solid ${accent}22`,
@@ -128,7 +128,7 @@ function StatCard({ img, fallbackImg, value, suffix, label, sub, accent, accentB
     );
   }
 
-  /* ── Desktop: original vertical card ── */
+  /* ── Desktop: vertical card (UNCHANGED) ── */
   return (
     <motion.div variants={item} whileHover={{ y: -5, scale: 1.015 }}
       className="relative rounded-[22px] overflow-hidden h-full flex flex-col"
@@ -191,10 +191,11 @@ export default function Slide05() {
               </p>
               <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "88" }} />
             </div>
+            {/* ✅ FIXED: "SERVICE" is now solid amber — fully readable on both desktop & mobile */}
             <h2 className="font-display leading-[0.92]"
               style={{ fontSize: "clamp(26px, 5.2vw, 80px)", color: LT.text }}>
               CORE{" "}
-              <span style={{ WebkitTextStroke: `2px ${LT.amber}`, color: "transparent" }}>SERVICE</span>{" "}
+              <span style={{ color: LT.amber }}>SERVICE</span>{" "}
               CAPACITY
             </h2>
             <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
@@ -211,7 +212,7 @@ export default function Slide05() {
         </div>
       </motion.div>
 
-      {/* ── DESKTOP: 3×2 grid ── */}
+      {/* ── DESKTOP: 3×2 grid (UNCHANGED) ── */}
       <motion.div variants={container} initial="hidden" animate="show"
         className="hidden md:grid md:grid-cols-3 flex-1 min-h-0 px-5 lg:px-6 py-3 gap-3 lg:gap-4"
         style={{ gridTemplateRows: "1fr 1fr" }}>
@@ -220,12 +221,20 @@ export default function Slide05() {
         ))}
       </motion.div>
 
-      {/* ── MOBILE: vertical list of horizontal cards ── */}
+      {/* ── MOBILE: scrollable vertical list ── */}
       <motion.div variants={container} initial="hidden" animate="show"
-        className="md:hidden flex-1 overflow-y-auto no-scrollbar px-3 py-3 flex flex-col gap-2.5">
+        className="md:hidden px-3 py-3 flex flex-col gap-2.5"
+        style={{
+          flex: "1 1 0",
+          minHeight: 0,
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
+        }}>
         {CARDS.map((card, i) => (
           <StatCard key={i} {...card} isMobile={true} />
         ))}
+        {/* Bottom padding so last card clears footer */}
+        <div className="flex-shrink-0 h-1" />
       </motion.div>
 
       {/* FOOTER */}

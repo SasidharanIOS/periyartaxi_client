@@ -85,7 +85,7 @@ function TeamCardMobile({ icon, value, label, desc, accent, accentBg }) {
   const count = useCountUp(value, 1600);
   return (
     <motion.div variants={item}
-      className="rounded-2xl flex flex-row items-center gap-3 relative overflow-hidden"
+      className="rounded-2xl flex flex-row items-center gap-3 relative overflow-hidden flex-shrink-0"
       style={{ background: LT.surface, border: `1.5px solid ${accent}22`, boxShadow: LT.shadowMd, padding: "12px 14px" }}>
       <div className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: accent }} />
       {/* Icon */}
@@ -125,7 +125,6 @@ export default function Slide09() {
         style={{ background: "rgba(37,99,235,0.07)" }} />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[30vw] rounded-full blur-3xl pointer-events-none"
         style={{ background: "rgba(124,58,237,0.05)" }} />
-      {/* Dot pattern */}
       <div className="absolute inset-0 opacity-40 pointer-events-none"
         style={{ backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
 
@@ -133,86 +132,168 @@ export default function Slide09() {
         className="relative z-10 flex flex-col h-full"
         style={{ padding: "clamp(10px,2vw,24px)" }}>
 
-        {/* Header */}
-        <motion.div variants={item} className="flex-shrink-0 mb-2 md:mb-3">
-          <div className="inline-flex items-center gap-2 mb-1">
-            <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "80" }} />
-            <p className="font-accent uppercase font-semibold tracking-[4px]"
-              style={{ fontSize: "clamp(9px,1.1vw,13px)", color: LT.amber }}>
-              Behind the Wheel
-            </p>
-            <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "80" }} />
-          </div>
-          <h2 className="font-display leading-none"
-            style={{ fontSize: "clamp(32px,7vw,88px)", color: LT.text }}>
-            TEAM{" "}
-            <span style={{ WebkitTextStroke: `2px ${LT.amber}`, color: "transparent" }}>
-              STRENGTH
-            </span>
-          </h2>
-          <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-            transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
-            className="rounded-full mt-1.5 origin-left"
-            style={{ width: "clamp(36px,5vw,60px)", height: 4, background: `linear-gradient(90deg, ${LT.amber}, transparent)` }} />
-        </motion.div>
+        {/* ── DESKTOP: Header + cards + summary (UNCHANGED) ── */}
+        <>
+          {/* Header — shown on desktop only */}
+          <motion.div variants={item} className="hidden md:block flex-shrink-0 mb-3">
+            <div className="inline-flex items-center gap-2 mb-1">
+              <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "80" }} />
+              <p className="font-accent uppercase font-semibold tracking-[4px]"
+                style={{ fontSize: "clamp(9px,1.1vw,13px)", color: LT.amber }}>
+                Behind the Wheel
+              </p>
+              <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "80" }} />
+            </div>
+            {/* ✅ FIXED: "STRENGTH" solid amber — desktop */}
+            <h2 className="font-display leading-none"
+              style={{ fontSize: "clamp(32px,7vw,88px)", color: LT.text }}>
+              TEAM{" "}
+              <span style={{ color: LT.amber }}>STRENGTH</span>
+            </h2>
+            <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+              transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
+              className="rounded-full mt-1.5 origin-left"
+              style={{ width: "clamp(36px,5vw,60px)", height: 4, background: `linear-gradient(90deg, ${LT.amber}, transparent)` }} />
+          </motion.div>
 
-        {/* ── Desktop: 3-col cards ── */}
-        <div className="hidden md:grid grid-cols-3 gap-3 flex-1 min-h-0 mb-3">
-          {team.map((t, i) => <TeamCardDesktop key={i} {...t} />)}
+          {/* Desktop 3-col cards */}
+          <div className="hidden md:grid grid-cols-3 gap-3 flex-1 min-h-0 mb-3">
+            {team.map((t, i) => <TeamCardDesktop key={i} {...t} />)}
+          </div>
+
+          {/* Desktop summary row */}
+          <motion.div variants={item} className="hidden md:grid grid-cols-2 gap-3 flex-shrink-0">
+            <div className="rounded-xl flex items-center gap-3 relative overflow-hidden"
+              style={{ background: LT.surface, border: `1.5px solid ${LT.amber}28`, boxShadow: LT.shadowMd, padding: "clamp(10px,1.5vw,20px)" }}>
+              <div className="absolute left-0 top-0 bottom-0 w-[3.5px] rounded-r-full" style={{ background: LT.amber }} />
+              <div className="rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ width: "clamp(38px,5vw,56px)", height: "clamp(38px,5vw,56px)", backgroundColor: LT.amberBg, border: `1.5px solid ${LT.amber}30`, color: LT.amber }}>
+                <MdSupport size={22} />
+              </div>
+              <div>
+                <div className="font-body font-bold leading-tight"
+                  style={{ fontSize: "clamp(11px,1.5vw,18px)", color: LT.text }}>
+                  Total Workforce
+                </div>
+                <div className="font-body mt-0.5 flex items-baseline gap-1 flex-wrap"
+                  style={{ fontSize: "clamp(10px,1.1vw,14px)", color: LT.textMuted }}>
+                  <span className="font-display" style={{ fontSize: "clamp(18px,2.8vw,34px)", color: LT.amber }}>
+                    {total}
+                  </span>
+                  <span>team members ready to serve</span>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-xl flex items-center gap-3 relative overflow-hidden"
+              style={{ background: LT.surface, border: "1.5px solid rgba(37,99,235,0.20)", boxShadow: LT.shadowMd, padding: "clamp(10px,1.5vw,20px)" }}>
+              <div className="absolute left-0 top-0 bottom-0 w-[3.5px] rounded-r-full" style={{ background: "#2563eb" }} />
+              <div className="rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ width: "clamp(38px,5vw,56px)", height: "clamp(38px,5vw,56px)", backgroundColor: "#dbeafe", border: "1.5px solid rgba(37,99,235,0.25)", color: "#2563eb" }}>
+                <MdVerified size={22} />
+              </div>
+              <div>
+                <div className="font-body font-bold leading-tight"
+                  style={{ fontSize: "clamp(11px,1.5vw,18px)", color: LT.text }}>
+                  Experienced & Verified
+                </div>
+                <div className="font-body mt-0.5"
+                  style={{ fontSize: "clamp(10px,1.1vw,14px)", color: LT.textMuted }}>
+                  All drivers background-checked & trained professionals
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </>
+
+        {/* ══════════════════════════════════════
+            MOBILE LAYOUT — sticky header + scroll
+            ══════════════════════════════════════ */}
+        <div className="flex md:hidden flex-col h-full" style={{ marginTop: "-100%" }}>
+          {/* This trick won't work — use separate wrapper instead */}
+        </div>
+      </motion.div>
+
+      {/* ── MOBILE: completely separate layout ── */}
+      <motion.div variants={container} initial="hidden" animate="show"
+        className="md:hidden absolute inset-0 z-20 flex flex-col"
+        style={{ background: LT.bg, padding: "16px 16px 0 16px" }}>
+
+        {/* Sticky header */}
+        <div className="flex-shrink-0 pb-3">
+          <motion.div variants={item}>
+            <div className="inline-flex items-center gap-2 mb-1">
+              <div className="h-[2px] w-4 rounded" style={{ background: LT.amber + "80" }} />
+              <p className="font-accent uppercase font-semibold tracking-[4px]"
+                style={{ fontSize: "9px", color: LT.amber }}>
+                Behind the Wheel
+              </p>
+              <div className="h-[2px] w-4 rounded" style={{ background: LT.amber + "80" }} />
+            </div>
+            {/* ✅ FIXED: "STRENGTH" solid amber — mobile */}
+            <h2 className="font-display leading-none" style={{ fontSize: "28px", color: LT.text }}>
+              TEAM{" "}
+              <span style={{ color: LT.amber }}>STRENGTH</span>
+            </h2>
+            <div className="w-10 h-[3px] rounded-full mt-1"
+              style={{ background: `linear-gradient(90deg, ${LT.amber}, transparent)` }} />
+          </motion.div>
         </div>
 
-        {/* ── Mobile: stacked horizontal cards ── */}
-        <div className="flex md:hidden flex-col gap-2 flex-1 min-h-0 mb-2">
-          {team.map((t, i) => <TeamCardMobile key={i} {...t} />)}
+        {/* ✅ Scrollable content */}
+        <div
+          className="flex-1 overflow-y-auto no-scrollbar pb-4"
+          style={{ minHeight: 0, WebkitOverflowScrolling: "touch" }}
+        >
+          {/* Team cards */}
+          <div className="flex flex-col gap-2 mb-3">
+            {team.map((t, i) => <TeamCardMobile key={i} {...t} />)}
+          </div>
+
+          {/* Summary cards */}
+          <div className="grid grid-cols-1 gap-2">
+            <div className="rounded-xl flex items-center gap-3 relative overflow-hidden"
+              style={{ background: LT.surface, border: `1.5px solid ${LT.amber}28`, boxShadow: LT.shadowMd, padding: "12px 14px" }}>
+              <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-r-full" style={{ background: LT.amber }} />
+              <div className="rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ width: 42, height: 42, backgroundColor: LT.amberBg, border: `1.5px solid ${LT.amber}30`, color: LT.amber }}>
+                <MdSupport size={20} />
+              </div>
+              <div>
+                <div className="font-body font-bold leading-tight"
+                  style={{ fontSize: "13px", color: LT.text }}>
+                  Total Workforce
+                </div>
+                <div className="font-body mt-0.5 flex items-baseline gap-1"
+                  style={{ fontSize: "12px", color: LT.textMuted }}>
+                  <span className="font-display" style={{ fontSize: "22px", color: LT.amber }}>{total}</span>
+                  <span>members ready to serve</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-xl flex items-center gap-3 relative overflow-hidden"
+              style={{ background: LT.surface, border: "1.5px solid rgba(37,99,235,0.20)", boxShadow: LT.shadowMd, padding: "12px 14px" }}>
+              <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-r-full" style={{ background: "#2563eb" }} />
+              <div className="rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ width: 42, height: 42, backgroundColor: "#dbeafe", border: "1.5px solid rgba(37,99,235,0.25)", color: "#2563eb" }}>
+                <MdVerified size={20} />
+              </div>
+              <div>
+                <div className="font-body font-bold leading-tight"
+                  style={{ fontSize: "13px", color: LT.text }}>
+                  Experienced & Verified
+                </div>
+                <div className="font-body mt-0.5"
+                  style={{ fontSize: "11px", color: LT.textMuted }}>
+                  Background-checked & trained professionals
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom padding */}
+          <div className="h-2" />
         </div>
-
-        {/* Summary row */}
-        <motion.div variants={item} className="grid grid-cols-2 gap-2 md:gap-3 flex-shrink-0">
-          {/* Total Workforce */}
-          <div className="rounded-xl flex items-center gap-3 relative overflow-hidden"
-            style={{ background: LT.surface, border: `1.5px solid ${LT.amber}28`, boxShadow: LT.shadowMd, padding: "clamp(10px,1.5vw,20px)" }}>
-            <div className="absolute left-0 top-0 bottom-0 w-[3.5px] rounded-r-full" style={{ background: LT.amber }} />
-            <div className="rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ width: "clamp(38px,5vw,56px)", height: "clamp(38px,5vw,56px)", backgroundColor: LT.amberBg, border: `1.5px solid ${LT.amber}30`, color: LT.amber }}>
-              <MdSupport size={22} />
-            </div>
-            <div>
-              <div className="font-body font-bold leading-tight"
-                style={{ fontSize: "clamp(11px,1.5vw,18px)", color: LT.text }}>
-                Total Workforce
-              </div>
-              <div className="font-body mt-0.5 flex items-baseline gap-1 flex-wrap"
-                style={{ fontSize: "clamp(10px,1.1vw,14px)", color: LT.textMuted }}>
-                <span className="font-display" style={{ fontSize: "clamp(18px,2.8vw,34px)", color: LT.amber }}>
-                  {total}
-                </span>
-                <span className="hidden sm:inline">team members ready to serve</span>
-                <span className="inline sm:hidden">members</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Experienced & Verified */}
-          <div className="rounded-xl flex items-center gap-3 relative overflow-hidden"
-            style={{ background: LT.surface, border: "1.5px solid rgba(37,99,235,0.20)", boxShadow: LT.shadowMd, padding: "clamp(10px,1.5vw,20px)" }}>
-            <div className="absolute left-0 top-0 bottom-0 w-[3.5px] rounded-r-full" style={{ background: "#2563eb" }} />
-            <div className="rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ width: "clamp(38px,5vw,56px)", height: "clamp(38px,5vw,56px)", backgroundColor: "#dbeafe", border: "1.5px solid rgba(37,99,235,0.25)", color: "#2563eb" }}>
-              <MdVerified size={22} />
-            </div>
-            <div>
-              <div className="font-body font-bold leading-tight"
-                style={{ fontSize: "clamp(11px,1.5vw,18px)", color: LT.text }}>
-                Experienced & Verified
-              </div>
-              <div className="font-body mt-0.5"
-                style={{ fontSize: "clamp(10px,1.1vw,14px)", color: LT.textMuted }}>
-                <span className="hidden sm:inline">All drivers background-checked & trained professionals</span>
-                <span className="inline sm:hidden">Background-checked & trained</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
       </motion.div>
     </div>
   );

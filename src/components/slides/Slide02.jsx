@@ -28,8 +28,8 @@ const scaleIn = {
 };
 
 const pillars = [
-  { icon: <MdFlashOn size={20} />, title: "Mission", desc: "Safe, punctual & professional transport — customer-first, always.", color: "#d97706" },
-  { icon: <MdStar size={20} />,    title: "Vision",  desc: "Trusted leader in travel, transport & driver services across Tamil Nadu.", color: "#2563eb" },
+  { icon: <MdFlashOn size={20} />, title: "Mission",    desc: "Safe, punctual & professional transport — customer-first, always.", color: "#d97706" },
+  { icon: <MdStar size={20} />,    title: "Vision",     desc: "Trusted leader in travel, transport & driver services across Tamil Nadu.", color: "#2563eb" },
   { icon: <MdShield size={20} />,  title: "Since 2015", desc: "10+ years — corporate, event & personal travel from Erode, TN.", color: "#16a34a" },
 ];
 
@@ -43,7 +43,7 @@ const stats = [
 const CAR_IMGS = {
   innova: `/innova.jpg`,
   swift:  `/dezire.png`,
-  aura:   `/aura.jpg`,
+  aura:   `/hyundaiaura.png `,
   creta:  `/ertiga.png`,
 };
 
@@ -88,7 +88,6 @@ function CarCard({ car, isActive, onClick }) {
           />
         )}
       </AnimatePresence>
-
       <img
         src={CAR_IMGS[car.key]} alt={car.name}
         className="absolute inset-0 w-full h-full"
@@ -133,7 +132,7 @@ export default function Slide02() {
       <div className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px)", backgroundSize: "32px 32px", opacity: 0.5 }} />
 
-      {/* ── DESKTOP: 2-col grid ── */}
+      {/* ── DESKTOP: 2-col grid (unchanged) ── */}
       <motion.div variants={containerV} initial="hidden" animate="show"
         className="hidden md:grid md:grid-cols-2 relative z-10 flex-1 min-h-0"
       >
@@ -144,7 +143,6 @@ export default function Slide02() {
             style={{ color: LT.yellow, fontSize: "clamp(10px, 1.1vw, 14px)" }}>
             About Us
           </motion.p>
-
           <motion.div variants={fadeLeft}>
             <h2 className="font-display leading-none" style={{ fontSize: "clamp(44px, 8vw, 108px)", color: LT.text }}>WHO WE</h2>
             <h2 className="font-display leading-none"
@@ -156,7 +154,6 @@ export default function Slide02() {
               initial={{ width: 0 }} animate={{ width: 80 }}
               transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }} />
           </motion.div>
-
           <div className="flex flex-col gap-2">
             {pillars.map((p, i) => (
               <motion.div key={i} variants={fadeLeft}
@@ -175,7 +172,6 @@ export default function Slide02() {
               </motion.div>
             ))}
           </div>
-
           <motion.div variants={fadeUp} className="grid grid-cols-4 gap-2">
             {stats.map((s, i) => (
               <motion.div key={i} whileHover={{ y: -4, boxShadow: `0 8px 24px ${s.color}25` }}
@@ -187,7 +183,6 @@ export default function Slide02() {
               </motion.div>
             ))}
           </motion.div>
-
           <motion.div variants={fadeUp} className="overflow-hidden rounded-xl"
             style={{ background: LT.yellowLight, border: "1px solid rgba(217,119,6,0.25)", boxShadow: LT.shadow }}>
             <div className="py-2 px-4 flex items-center gap-3 overflow-hidden">
@@ -217,7 +212,6 @@ export default function Slide02() {
               <FaTaxi style={{ color: LT.yellow, opacity: 0.6 }} size={12} />
             </motion.div>
           </motion.div>
-
           <motion.div variants={fadeUp} className="grid grid-cols-2 gap-3">
             {carData.map((car, i) => (
               <CarCard key={car.key} car={car} index={i} isActive={activeCard === i} onClick={() => setActiveCard(i)} />
@@ -226,83 +220,86 @@ export default function Slide02() {
         </motion.div>
       </motion.div>
 
-      {/* ── MOBILE: stacked layout ── */}
+      {/* ── MOBILE: fully scrollable ── */}
       <motion.div variants={containerV} initial="hidden" animate="show"
-        className="md:hidden relative z-10 flex flex-col w-full h-full px-3.5 pt-3 pb-12 gap-2.5 overflow-y-auto no-scrollbar"
+        className="md:hidden relative z-10 w-full overflow-y-auto"
+        style={{ WebkitOverflowScrolling: "touch", paddingBottom: "72px" }}
       >
-        {/* Label + Heading */}
-        <motion.div variants={fadeUp} className="flex-shrink-0">
-          <p className="font-accent uppercase tracking-[6px] font-semibold mb-0.5"
-            style={{ color: LT.yellow, fontSize: "11px" }}>About Us</p>
-          <div className="flex items-end gap-3">
-            <div>
-              <h2 className="font-display leading-none" style={{ fontSize: "clamp(38px, 12vw, 58px)", color: LT.text }}>
-                WHO WE
-              </h2>
-              <h2 className="font-display leading-none"
-                style={{ fontSize: "clamp(38px, 12vw, 58px)", WebkitTextStroke: `2px ${LT.yellow}`, color: "transparent" }}>
-                ARE
-              </h2>
-              <div className="h-[3px] w-12 rounded-full mt-1.5"
-                style={{ background: `linear-gradient(90deg, ${LT.yellow}, transparent)` }} />
+        <div className="flex flex-col px-3.5 pt-3 gap-3">
+          {/* Label + Heading */}
+          <motion.div variants={fadeUp} className="flex-shrink-0">
+            <p className="font-accent uppercase tracking-[6px] font-semibold mb-0.5"
+              style={{ color: LT.yellow, fontSize: "11px" }}>About Us</p>
+            <div className="flex items-end gap-3">
+              <div>
+                <h2 className="font-display leading-none" style={{ fontSize: "clamp(38px, 12vw, 58px)", color: LT.text }}>
+                  WHO WE
+                </h2>
+                <h2 className="font-display leading-none"
+                  style={{ fontSize: "clamp(38px, 12vw, 58px)", WebkitTextStroke: `2px ${LT.yellow}`, color: "transparent" }}>
+                  ARE
+                </h2>
+                <div className="h-[3px] w-12 rounded-full mt-1.5"
+                  style={{ background: `linear-gradient(90deg, ${LT.yellow}, transparent)` }} />
+              </div>
+              {/* Stats beside heading */}
+              <div className="grid grid-cols-2 gap-1.5 flex-1 ml-2 mb-1">
+                {stats.map((s, i) => (
+                  <div key={i} className="flex flex-col items-center text-center rounded-xl py-2 px-1"
+                    style={{ background: LT.surface, border: `1px solid ${s.color}28`, boxShadow: LT.shadow }}>
+                    <div style={{ color: s.color }}>{s.icon}</div>
+                    <div className="font-display leading-none mt-0.5" style={{ fontSize: "clamp(16px, 5vw, 24px)", color: s.color }}>{s.value}</div>
+                    <div className="font-body font-medium" style={{ color: LT.textMuted, fontSize: "9px" }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
             </div>
-            {/* Stats — beside heading on mobile */}
-            <div className="grid grid-cols-2 gap-1.5 flex-1 ml-2 mb-1">
-              {stats.map((s, i) => (
-                <div key={i} className="flex flex-col items-center text-center rounded-xl py-2 px-1"
-                  style={{ background: LT.surface, border: `1px solid ${s.color}28`, boxShadow: LT.shadow }}>
-                  <div style={{ color: s.color }}>{s.icon}</div>
-                  <div className="font-display leading-none mt-0.5" style={{ fontSize: "clamp(16px, 5vw, 24px)", color: s.color }}>{s.value}</div>
-                  <div className="font-body font-medium" style={{ color: LT.textMuted, fontSize: "9px" }}>{s.label}</div>
-                </div>
+          </motion.div>
+
+          {/* Fleet grid */}
+          <motion.div variants={fadeUp}>
+            <div className="flex items-center gap-2 mb-1.5">
+              <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: LT.yellow }} />
+              <span className="font-accent uppercase tracking-[5px] font-semibold"
+                style={{ color: LT.yellow, fontSize: "10px" }}>Our Fleet</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {carData.map((car, i) => (
+                <CarCard key={car.key} car={car} index={i} isActive={activeCard === i} onClick={() => setActiveCard(i)} />
               ))}
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Fleet grid — 2×2 */}
-        <motion.div variants={fadeUp} className="flex-shrink-0">
-          <div className="flex items-center gap-2 mb-1.5">
-            <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: LT.yellow }} />
-            <span className="font-accent uppercase tracking-[5px] font-semibold"
-              style={{ color: LT.yellow, fontSize: "10px" }}>Our Fleet</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {carData.map((car, i) => (
-              <CarCard key={car.key} car={car} index={i} isActive={activeCard === i} onClick={() => setActiveCard(i)} />
+          {/* Pillars */}
+          <div className="flex flex-col gap-1.5">
+            {pillars.map((p, i) => (
+              <motion.div key={i} variants={fadeUp}
+                className="rounded-xl px-3 py-2.5 flex items-start gap-2.5"
+                style={{ background: LT.surface, border: `1px solid ${LT.border}`, borderLeft: `3px solid ${p.color}`, boxShadow: LT.shadow }}>
+                <div className="mt-0.5 flex-shrink-0" style={{ color: p.color }}>{p.icon}</div>
+                <div>
+                  <span className="font-body font-bold" style={{ color: p.color, fontSize: "12px" }}>{p.title}{" — "}</span>
+                  <span className="font-body" style={{ color: LT.textMuted, fontSize: "11px" }}>{p.desc}</span>
+                </div>
+              </motion.div>
             ))}
           </div>
-        </motion.div>
 
-        {/* Pillars */}
-        <div className="flex flex-col gap-1.5 flex-shrink-0">
-          {pillars.map((p, i) => (
-            <motion.div key={i} variants={fadeUp}
-              className="rounded-xl px-3 py-2.5 flex items-start gap-2.5"
-              style={{ background: LT.surface, border: `1px solid ${LT.border}`, borderLeft: `3px solid ${p.color}`, boxShadow: LT.shadow }}>
-              <div className="mt-0.5 flex-shrink-0" style={{ color: p.color }}>{p.icon}</div>
-              <div>
-                <span className="font-body font-bold" style={{ color: p.color, fontSize: "12px" }}>{p.title}{" — "}</span>
-                <span className="font-body" style={{ color: LT.textMuted, fontSize: "11px" }}>{p.desc}</span>
+          {/* Ticker */}
+          <motion.div variants={fadeUp} className="rounded-xl overflow-hidden"
+            style={{ background: LT.yellowLight, border: "1px solid rgba(217,119,6,0.25)", boxShadow: LT.shadow }}>
+            <div className="py-2 px-3 flex items-center gap-2 overflow-hidden">
+              <FaTaxi className="flex-shrink-0" style={{ color: LT.yellow }} size={13} />
+              <div className="overflow-hidden flex-1">
+                <motion.div animate={{ x: ["0%", "-50%"] }} transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                  className="whitespace-nowrap font-body font-medium"
+                  style={{ display: "inline-block", color: LT.yellow, fontSize: "11px" }}>
+                  {TICKER + TICKER}
+                </motion.div>
               </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Ticker */}
-        <motion.div variants={fadeUp} className="rounded-xl overflow-hidden flex-shrink-0"
-          style={{ background: LT.yellowLight, border: "1px solid rgba(217,119,6,0.25)", boxShadow: LT.shadow }}>
-          <div className="py-2 px-3 flex items-center gap-2 overflow-hidden">
-            <FaTaxi className="flex-shrink-0" style={{ color: LT.yellow }} size={13} />
-            <div className="overflow-hidden flex-1">
-              <motion.div animate={{ x: ["0%", "-50%"] }} transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-                className="whitespace-nowrap font-body font-medium"
-                style={{ display: "inline-block", color: LT.yellow, fontSize: "11px" }}>
-                {TICKER + TICKER}
-              </motion.div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </motion.div>
     </div>
   );

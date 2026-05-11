@@ -34,7 +34,7 @@ const FLEET_DATA = [
     accent: "#d97706", accentBg: "#fef3c7", accentDim: "rgba(217,119,6,0.08)",
     img: VEHICLE_IMAGES.direct, imgAlt: "Direct Control Vehicles",
     badge: "SEDAN / MINI",
-    vehicles: ["Innova ×12", "Ertiga ×7", "Xylo ×5"],
+    vehicles: ["Ford Aspire", "Swift Dzire ×7", "Amaze ×2", "Aura ×3", "Waganor"],
   },
   {
     key: "attachment",
@@ -44,7 +44,7 @@ const FLEET_DATA = [
     accent: "#2563eb", accentBg: "#dbeafe", accentDim: "rgba(37,99,235,0.07)",
     img: VEHICLE_IMAGES.attachment, imgAlt: "Attachment Vehicles",
     badge: "SUV / INNOVA",
-    vehicles: ["Creta", "Swift Dzire ×7", "Amaze ×2", "Aura ×3"],
+    vehicles: ["Innova ×12", "Ertiga ×7", "Xylo ×5"],
   },
   {
     key: "tieup",
@@ -134,7 +134,7 @@ function FleetCardMobile({ data, total }) {
 
   return (
     <motion.div variants={item}
-      className="relative overflow-hidden rounded-2xl flex flex-row"
+      className="relative overflow-hidden rounded-2xl flex flex-row flex-shrink-0"
       style={{ background: LT.surface, border: `1.5px solid ${data.accent}28`, boxShadow: LT.shadowMd, minHeight: "130px" }}>
 
       {/* Image — left 38% */}
@@ -234,10 +234,11 @@ export default function Slide06() {
               </p>
               <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "80" }} />
             </div>
+            {/* ✅ FIXED: "STRENGTH" solid amber — fully readable */}
             <h2 className="font-display leading-none"
               style={{ fontSize: "clamp(30px, 7vw, 86px)", color: LT.text, letterSpacing: "-0.01em" }}>
               FLEET{" "}
-              <span style={{ WebkitTextStroke: `2px ${LT.amber}`, color: "transparent" }}>STRENGTH</span>
+              <span style={{ color: LT.amber }}>STRENGTH</span>
             </h2>
             <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
               transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
@@ -245,7 +246,7 @@ export default function Slide06() {
               style={{ background: `linear-gradient(90deg, ${LT.amber}, transparent)` }} />
           </div>
 
-          {/* Total badge */}
+          {/* ✅ FIXED: Total badge number — solid amber fill instead of stroke */}
           <motion.div variants={item} className="rounded-2xl px-4 py-2.5 text-center flex-shrink-0"
             style={{ background: LT.surface, border: `1.5px solid ${LT.amber}35`, boxShadow: LT.shadowMd }}>
             <p className="font-accent uppercase tracking-[4px] font-semibold"
@@ -253,7 +254,7 @@ export default function Slide06() {
               Total Network
             </p>
             <div className="font-display leading-none"
-              style={{ fontSize: "clamp(38px, 6vw, 96px)", lineHeight: 1, color: LT.text, WebkitTextStroke: `2px ${LT.amber}` }}>
+              style={{ fontSize: "clamp(38px, 6vw, 96px)", lineHeight: 1, color: LT.amber }}>
               {total}
             </div>
             <p className="font-body mt-1 font-medium"
@@ -274,12 +275,23 @@ export default function Slide06() {
           ))}
         </div>
 
-        {/* ── MOBILE: vertical stack of horizontal cards ── */}
-        <div className="md:hidden flex flex-col gap-2.5 flex-1 overflow-y-auto no-scrollbar">
+        {/* ── MOBILE: scrollable vertical stack ── */}
+        <div
+          className="md:hidden flex flex-col gap-2.5 no-scrollbar"
+          style={{
+            flex: "1 1 0",
+            minHeight: 0,
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
           {FLEET_DATA.map((d) => (
             <FleetCardMobile key={d.key} data={d} total={152} />
           ))}
+          {/* Bottom padding so last card clears edge */}
+          <div className="flex-shrink-0 h-1" />
         </div>
+
       </motion.div>
     </div>
   );

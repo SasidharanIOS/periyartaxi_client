@@ -26,7 +26,7 @@ const bookings = [
     subtitle: "Point A → Point B",
     tag: "MOST POPULAR",
     tagColor: "#d97706", tagText: "#fff",
-    image: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/c1fe5034aba7978946f9bfdc2e10c121b1a8ee2f.jpg",
+    image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800&q=80",
     accent: "#d97706",
   },
   {
@@ -42,7 +42,7 @@ const bookings = [
     subtitle: "Pay Per Hour",
     tag: "FLEXIBLE",
     tagColor: "#2563eb", tagText: "#fff",
-    image: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/e3a473923651b5ec2910540b2d914a768b1b2c02.jpg",
+    image: "https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&q=80",
     accent: "#2563eb",
   },
   {
@@ -63,12 +63,10 @@ const bookings = [
   },
 ];
 
-/* ── Shared card inner content (used by both desktop & mobile) ── */
 function CardInner({ b, i, hovered }) {
   const isHov = hovered === i;
   return (
     <>
-      {/* IMAGE */}
       <div className="relative overflow-hidden flex-shrink-0" style={{ height: "72%" }}>
         <img
           src={b.image}
@@ -85,7 +83,6 @@ function CardInner({ b, i, hovered }) {
         <div className="absolute bottom-0 left-0 right-0 pointer-events-none"
           style={{ height: "55%", background: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.58) 100%)" }} />
 
-        {/* Tag */}
         <div className="absolute top-2.5 left-2.5">
           <span className="font-body font-black rounded-full px-2 py-0.5 leading-tight"
             style={{
@@ -97,13 +94,11 @@ function CardInner({ b, i, hovered }) {
           </span>
         </div>
 
-        {/* Number watermark */}
         <div className="absolute top-2 right-3 font-display leading-none select-none"
           style={{ fontSize: "clamp(30px, 3.6vw, 60px)", color: "rgba(255,255,255,0.15)" }}>
           {String(i + 1).padStart(2, "0")}
         </div>
 
-        {/* Fleet badge — Bulk only */}
         {i === 3 && (
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.6, duration: 0.4 }} className="absolute bottom-10 right-2.5">
@@ -115,7 +110,6 @@ function CardInner({ b, i, hovered }) {
           </motion.div>
         )}
 
-        {/* Title over image */}
         <div className="absolute bottom-0 left-0 right-0 px-3 pb-2.5">
           <h3 className="font-display leading-tight whitespace-pre-line"
             style={{ fontSize: "clamp(17px, 2vw, 32px)", color: "#ffffff", textShadow: "0 2px 14px rgba(0,0,0,0.7)" }}>
@@ -124,7 +118,6 @@ function CardInner({ b, i, hovered }) {
         </div>
       </div>
 
-      {/* CONTENT */}
       <div className="flex flex-col flex-1 px-3 pt-2 pb-2.5 justify-between"
         style={{ borderTop: `2px solid ${b.accent}22` }}>
         <p className="font-accent uppercase tracking-widest font-semibold"
@@ -148,13 +141,11 @@ function CardInner({ b, i, hovered }) {
         </motion.div>
       </div>
 
-      {/* Left accent bar */}
       <motion.div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-r-full"
         animate={{ opacity: isHov ? 1 : 0, scaleY: isHov ? 1 : 0.2 }}
         transition={{ duration: 0.3 }}
         style={{ backgroundColor: b.accent, transformOrigin: "top" }} />
 
-      {/* Top glow */}
       <motion.div animate={{ opacity: isHov ? 1 : 0 }} transition={{ duration: 0.3 }}
         className="absolute inset-0 pointer-events-none rounded-2xl"
         style={{ background: `radial-gradient(ellipse at 50% 0%, ${b.accent}0d 0%, transparent 65%)` }} />
@@ -183,10 +174,11 @@ export default function Slide04() {
           Book Your Ride
         </p>
         <div className="flex items-end justify-between">
+          {/* ✅ FIXED: "BOOKING" is now solid amber — fully visible and readable */}
           <h2 className="font-display leading-none"
             style={{ fontSize: "clamp(28px, 5.5vw, 72px)", color: LT.text }}>
             FLEXIBLE{" "}
-            <span style={{ WebkitTextStroke: `2px ${LT.amber}`, color: "transparent" }}>BOOKING</span>
+            <span style={{ color: LT.amber }}>BOOKING</span>
           </h2>
           <span className="hidden md:block font-body font-medium mb-1"
             style={{ fontSize: "clamp(11px, 1vw, 13px)", color: LT.textMuted }}>
@@ -219,9 +211,15 @@ export default function Slide04() {
         ))}
       </motion.div>
 
-      {/* ── MOBILE: 2-col grid (2+2+1 centered) ── */}
+      {/* ── MOBILE: scrollable 2-col grid ── */}
       <motion.div variants={container} initial="hidden" animate="show"
-        className="md:hidden flex-1 overflow-y-auto no-scrollbar px-3 py-3 flex flex-col gap-2.5"
+        className="md:hidden px-3 py-3 flex flex-col gap-2.5"
+        style={{
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
+          flex: "1 1 0",
+          minHeight: 0,
+        }}
       >
         {/* Row 1: cards 0 & 1 */}
         <div className="grid grid-cols-2 gap-2 flex-shrink-0">
@@ -270,7 +268,6 @@ export default function Slide04() {
             boxShadow: LT.shadowMd,
             height: "160px",
           }}>
-          {/* Landscape layout for last card */}
           <img src={bookings[4].image} alt={bookings[4].title.replace("\n", " ")}
             className="absolute inset-0 w-full h-full object-cover"
             style={{ filter: "brightness(0.82) saturate(1.0)" }} />
@@ -295,6 +292,9 @@ export default function Slide04() {
             <div className="mt-2 h-[2.5px] w-10 rounded-full" style={{ backgroundColor: bookings[4].accent }} />
           </div>
         </motion.div>
+
+        {/* Bottom padding */}
+        <div className="flex-shrink-0 h-1" />
       </motion.div>
 
       {/* BOTTOM STRIP */}

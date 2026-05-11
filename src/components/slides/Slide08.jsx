@@ -15,18 +15,18 @@ const suvList = [
   { name: "Ertiga",  count: 7,  img: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/69058e1a5606b5cb853028ce61bbc0e9d185eca5.jpg", tag: "7-Seater MUV", accent: "#ea580c" },
   { name: "Xylo",    count: 5,  img: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/aba27fb6c6a39f3a32fd7d6558300768e393c9e3.jpg", tag: "8-Seater SUV", accent: "#16a34a" },
   { name: "Eco",     count: 5,  img: "https://stimg.cardekho.com/images/carexteriorimages/930x620/Maruti/Eeco/10376/1708671417179/front-left-side-47.jpg", tag: "Van / Cargo",  accent: "#2563eb" },
-  { name: "Tavera",  count: 3,  img: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/d47d18b9b3cfdd651611a99202c676f052ab0efb.jpg", tag: "8-Seater MUV", accent: "#7c3aed" },
+  { name: "Tavera",  count: 3,  img: "/tavera.png", tag: "8-Seater MUV", accent: "#7c3aed" },
 ];
 
 const sedanList = [
-  { name: "Swift Dzire",  count: 7, img: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/93f8320fbefbf3c18097beb9e5e4d4b6c56bd506.jpg", tag: "Compact Sedan",  accent: "#dc2626" },
-  { name: "Honda Amaze",  count: 2, img: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/5d593a6683b50ae65261d534d91c04cf30144f95.jpg", tag: "Sub-Compact",     accent: "#0d9488" },
-  { name: "Hyundai Aura", count: 3, img: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/16fe749e5d4158b6a49751da033c28439bcb4aab.jpg", tag: "Compact Sedan",  accent: "#7c3aed" },
+  { name: "Swift Dzire",  count: 7, img: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/93f8320fbefbf3c18097beb9e5e4d4b6c56bd506.jpg", tag: "Compact Sedan", accent: "#dc2626" },
+  { name: "Honda Amaze",  count: 2, img: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/5d593a6683b50ae65261d534d91c04cf30144f95.jpg", tag: "Sub-Compact",   accent: "#0d9488" },
+  { name: "Hyundai Aura", count: 3, img: "https://pplx-res.cloudinary.com/image/upload/pplx_search_images/16fe749e5d4158b6a49751da033c28439bcb4aab.jpg", tag: "Compact Sedan", accent: "#7c3aed" },
 ];
 
 const row1 = suvList.slice(0, 4);
 const row2 = [...suvList.slice(4), ...sedanList];
-const allVehicles = [...suvList, ...sedanList]; // 8 total
+const allVehicles = [...suvList, ...sedanList];
 
 const container = {
   hidden: {},
@@ -58,9 +58,7 @@ function VehicleCardDesktop({ name, count, img, tag, accent }) {
       <div className="absolute top-0 left-0 right-0 h-[3px] z-10" style={{ background: accent }} />
       <div className="absolute bottom-0 left-0 right-0 px-2.5 pb-2 pt-4 z-10">
         <div className="font-body font-black text-white leading-tight"
-          style={{ fontSize: "clamp(9px, 1.1vw, 13px)", textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}>
-          {name}
-        </div>
+          style={{ fontSize: "clamp(9px, 1.1vw, 13px)", textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}>{name}</div>
         <div className="font-body font-bold mt-0.5 px-1.5 py-0.5 rounded-full inline-block"
           style={{ fontSize: "clamp(7px, 0.75vw, 9px)", background: "rgba(255,255,255,0.18)", backdropFilter: "blur(4px)", color: "#fff", letterSpacing: "0.04em" }}>
           {tag}
@@ -70,14 +68,19 @@ function VehicleCardDesktop({ name, count, img, tag, accent }) {
   );
 }
 
-/* ── Mobile card — vertical card filling grid cell ── */
+/* ── Mobile card ── */
 function VehicleCardMobile({ name, count, img, tag, accent }) {
   const n = useCountUp(count, 1300);
   return (
     <motion.div variants={item}
-      className="relative overflow-hidden rounded-xl flex flex-col w-full h-full"
-      style={{ background: LT.surface, border: `1.5px solid ${accent}25`, boxShadow: LT.shadowMd, minHeight: 0 }}>
-      {/* Image — flex-1 so it fills available height */}
+      className="relative overflow-hidden rounded-xl flex flex-col w-full"
+      style={{
+        background: LT.surface,
+        border: `1.5px solid ${accent}25`,
+        boxShadow: LT.shadowMd,
+        height: "150px",
+        flexShrink: 0,
+      }}>
       <div className="relative overflow-hidden flex-1 min-h-0">
         <div className="absolute inset-0"
           style={{ background: `linear-gradient(135deg, ${accent}18, ${accent}30)` }} />
@@ -85,20 +88,17 @@ function VehicleCardMobile({ name, count, img, tag, accent }) {
           className="absolute inset-0 w-full h-full"
           style={{ objectFit: "contain", objectPosition: "center 55%", transform: "scale(1.1)", transformOrigin: "center 60%" }} />
         <div className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: accent }} />
-        {/* Bottom gradient */}
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.45) 100%)" }} />
-        {/* Count badge */}
         <div className="absolute top-1.5 right-1.5 font-display leading-none rounded-md px-1.5 py-0.5 z-10"
-          style={{ fontSize: "clamp(14px, 3.5vw, 18px)", background: "rgba(255,255,255,0.92)", backdropFilter: "blur(4px)", color: accent, border: `1px solid ${accent}30` }}>
+          style={{ fontSize: "16px", background: "rgba(255,255,255,0.92)", backdropFilter: "blur(4px)", color: accent, border: `1px solid ${accent}30` }}>
           {n}
         </div>
       </div>
-      {/* Label bottom */}
       <div className="flex-shrink-0 px-2.5 py-2" style={{ borderTop: `2px solid ${accent}30` }}>
-        <div className="font-body font-black leading-tight" style={{ fontSize: "clamp(11px, 2.8vw, 13px)", color: LT.text }}>{name}</div>
+        <div className="font-body font-black leading-tight" style={{ fontSize: "12px", color: LT.text }}>{name}</div>
         <div className="font-body font-bold mt-0.5 px-1.5 py-0.5 rounded-full inline-block w-fit"
-          style={{ fontSize: "clamp(8px, 2vw, 10px)", background: `${accent}15`, color: accent, border: `1px solid ${accent}25` }}>
+          style={{ fontSize: "9px", background: `${accent}15`, color: accent, border: `1px solid ${accent}25` }}>
           {tag}
         </div>
       </div>
@@ -121,25 +121,27 @@ export default function Slide08() {
       <div className="absolute inset-0 opacity-40 pointer-events-none"
         style={{ backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
 
+      {/* ══════════════════════════════════════
+          DESKTOP LAYOUT
+          ══════════════════════════════════════ */}
       <motion.div variants={container} initial="hidden" animate="show"
-        className="relative z-10 w-full h-full flex flex-col px-4 md:px-7 pt-3 pb-3"
+        className="hidden md:flex relative z-10 w-full h-full flex-col px-7 pt-3 pb-3"
         style={{ gap: "clamp(4px, 0.8vh, 10px)" }}>
 
-        {/* HEADER */}
+        {/* Header */}
         <motion.div variants={item} className="flex items-center justify-between gap-3 flex-shrink-0">
           <div>
             <div className="inline-flex items-center gap-2 mb-1">
               <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "80" }} />
               <p className="font-accent uppercase font-semibold tracking-[4px]"
-                style={{ fontSize: "clamp(8px, 0.85vw, 11px)", color: LT.amber }}>
-                Attachment Fleet
-              </p>
+                style={{ fontSize: "clamp(8px, 0.85vw, 11px)", color: LT.amber }}>Attachment Fleet</p>
               <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "80" }} />
             </div>
+            {/* ✅ FIXED: "VEHICLES" now solid amber — readable instead of outlined/stroked */}
             <h2 className="font-display leading-none"
               style={{ fontSize: "clamp(18px, 3.5vw, 48px)", color: LT.text }}>
               ATTACHMENT{" "}
-              <span style={{ WebkitTextStroke: `2px ${LT.amber}`, color: "transparent" }}>VEHICLES</span>
+              <span style={{ color: LT.amber }}>VEHICLES</span>
             </h2>
             <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
               transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
@@ -152,55 +154,90 @@ export default function Slide08() {
             style={{ background: LT.surface, border: `1.5px solid ${LT.amber}30`, boxShadow: LT.shadowMd }}>
             <div className="text-center">
               <div className="font-display leading-none"
-                style={{ fontSize: "clamp(20px, 3.5vw, 44px)", color: LT.amber }}>
-                {total}
-              </div>
+                style={{ fontSize: "clamp(20px, 3.5vw, 44px)", color: LT.amber }}>{total}</div>
               <div className="font-body font-semibold"
-                style={{ fontSize: "clamp(8px, 0.8vw, 11px)", color: LT.textMuted }}>
-                Total Vehicles
-              </div>
+                style={{ fontSize: "clamp(8px, 0.8vw, 11px)", color: LT.textMuted }}>Total Vehicles</div>
             </div>
-            <div className="flex flex-col gap-1 pl-3"
-              style={{ borderLeft: `1px solid ${LT.amber}25` }}>
+            <div className="flex flex-col gap-1 pl-3" style={{ borderLeft: `1px solid ${LT.amber}25` }}>
               <div className="flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: LT.amber }} />
                 <span className="font-body font-medium"
-                  style={{ fontSize: "clamp(9px, 0.85vw, 11px)", color: LT.textMuted }}>
-                  {suv} SUV / MUV
-                </span>
+                  style={{ fontSize: "clamp(9px, 0.85vw, 11px)", color: LT.textMuted }}>{suv} SUV / MUV</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#2563eb" }} />
                 <span className="font-body font-medium"
-                  style={{ fontSize: "clamp(9px, 0.85vw, 11px)", color: LT.textMuted }}>
-                  {sedan} Sedans
-                </span>
+                  style={{ fontSize: "clamp(9px, 0.85vw, 11px)", color: LT.textMuted }}>{sedan} Sedans</span>
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* ── DESKTOP: 4×2 grid ── */}
-        <div className="hidden md:flex md:flex-col flex-1 min-h-0 gap-2">
-          <div className="flex-1 min-h-0 grid gap-2" style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}>
+        {/* 4×2 grid */}
+        <div className="flex flex-col flex-1 min-h-0 gap-2">
+          <div className="flex-1 min-h-0 grid gap-2"
+            style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}>
             {row1.map((v, i) => <VehicleCardDesktop key={`r1-${i}`} {...v} />)}
           </div>
-          <div className="flex-1 min-h-0 grid gap-2" style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}>
+          <div className="flex-1 min-h-0 grid gap-2"
+            style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}>
             {row2.map((v, i) => <VehicleCardDesktop key={`r2-${i}`} {...v} />)}
           </div>
         </div>
+      </motion.div>
 
-        {/* ── MOBILE: 2-col × 4-row grid filling all remaining height ── */}
-        <div className="md:hidden flex-1 min-h-0"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gridTemplateRows: "repeat(4, 1fr)",
-            gap: "8px",
-          }}>
-          {allVehicles.map((v, i) => (
-            <VehicleCardMobile key={i} {...v} />
-          ))}
+      {/* ══════════════════════════════════════
+          MOBILE LAYOUT
+          ══════════════════════════════════════ */}
+      <motion.div variants={container} initial="hidden" animate="show"
+        className="md:hidden relative z-10 w-full h-full flex flex-col">
+
+        {/* Sticky header */}
+        <div className="flex-shrink-0 px-4 pt-4 pb-3" style={{ background: LT.bg }}>
+          <motion.div variants={item} className="flex items-start justify-between gap-3">
+            <div>
+              <div className="inline-flex items-center gap-2 mb-1">
+                <div className="h-[2px] w-4 rounded" style={{ background: LT.amber + "80" }} />
+                <p className="font-accent uppercase font-semibold tracking-[4px]"
+                  style={{ fontSize: "9px", color: LT.amber }}>Attachment Fleet</p>
+                <div className="h-[2px] w-4 rounded" style={{ background: LT.amber + "80" }} />
+              </div>
+              {/* ✅ FIXED: "VEHICLES" solid amber on mobile too */}
+              <h2 className="font-display leading-none" style={{ fontSize: "22px", color: LT.text }}>
+                ATTACHMENT{" "}
+                <span style={{ color: LT.amber }}>VEHICLES</span>
+              </h2>
+              <div className="w-10 h-[2.5px] rounded-full mt-1"
+                style={{ background: `linear-gradient(90deg, ${LT.amber}, transparent)` }} />
+            </div>
+
+            {/* Compact total pill */}
+            <div className="flex-shrink-0 flex items-center gap-2 rounded-xl px-3 py-2"
+              style={{ background: LT.surface, border: `1.5px solid ${LT.amber}30`, boxShadow: LT.shadowMd }}>
+              <div className="text-center">
+                <div className="font-display leading-none" style={{ fontSize: "26px", color: LT.amber }}>{total}</div>
+                <div className="font-body font-semibold" style={{ fontSize: "9px", color: LT.textMuted }}>Total Vehicles</div>
+              </div>
+              <div className="flex flex-col gap-1 pl-2" style={{ borderLeft: `1px solid ${LT.amber}25` }}>
+                <div className="flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: LT.amber }} />
+                  <span className="font-body font-medium" style={{ fontSize: "10px", color: LT.textMuted }}>{suv} SUV / MUV</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#2563eb" }} />
+                  <span className="font-body font-medium" style={{ fontSize: "10px", color: LT.textMuted }}>{sedan} Sedans</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Scrollable card grid */}
+        <div className="flex-1 overflow-y-auto px-4 pb-4"
+          style={{ WebkitOverflowScrolling: "touch" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+            {allVehicles.map((v, i) => <VehicleCardMobile key={i} {...v} />)}
+          </div>
         </div>
       </motion.div>
     </div>

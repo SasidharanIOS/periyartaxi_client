@@ -68,7 +68,6 @@ const services = [
   { image: "/tempocoachbusservices.png",   label: "Tempo / Coach / Bus Services", accent: "#dc2626", emoji: "🚌" },
 ];
 
-/* ── Desktop-only 3D tilt wrapper ── */
 function TiltCard({ children, accent, index }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -109,7 +108,6 @@ function TiltCard({ children, accent, index }) {
   );
 }
 
-/* ── Mobile card (no tilt, tap-optimized) ── */
 function MobileCard({ svc, index, isActive, onTap }) {
   return (
     <motion.div custom={index} variants={cardVariants}
@@ -123,7 +121,6 @@ function MobileCard({ svc, index, isActive, onTap }) {
         transition: "border-color 0.25s, box-shadow 0.25s",
       }}
     >
-      {/* Image */}
       <div className="relative overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
         <img src={svc.image} alt={svc.label} loading="lazy"
           className="w-full h-full object-cover"
@@ -139,28 +136,20 @@ function MobileCard({ svc, index, isActive, onTap }) {
         </div>
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: "linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.48) 100%)" }} />
-
-        {/* Emoji badge */}
         <div className="absolute top-1.5 right-1.5 w-7 h-7 rounded-lg flex items-center justify-center text-sm"
           style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(4px)", border: `1px solid ${svc.accent}28` }}>
           {svc.emoji}
         </div>
-
-        {/* Number */}
         <div className="absolute bottom-7 left-2 font-display leading-none"
           style={{ fontSize: "18px", color: "rgba(255,255,255,0.4)" }}>
           {String(index + 1).padStart(2, "0")}
         </div>
-
-        {/* Active top bar */}
         {isActive && (
           <motion.div initial={{ width: 0 }} animate={{ width: "100%" }}
             className="absolute top-0 left-0 h-[3px]"
             style={{ background: svc.accent }} />
         )}
       </div>
-
-      {/* Label */}
       <div className="px-2.5 pb-2 pt-1.5 flex-shrink-0"
         style={{ borderTop: `1px solid ${svc.accent}18` }}>
         <p className="font-body font-bold leading-snug"
@@ -205,11 +194,10 @@ export default function Slide03() {
       <div className="absolute inset-0 opacity-[0.45] pointer-events-none"
         style={{ backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.055) 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
 
-      {/* ── DESKTOP layout ── */}
+      {/* ── DESKTOP layout (unchanged) ── */}
       <motion.div variants={containerVariants} initial="hidden" animate="show"
         className="hidden md:flex md:flex-col relative z-10 h-full px-10 lg:px-14 pt-5 pb-14"
       >
-        {/* Header */}
         <motion.div variants={headerVariants} className="mb-3.5 flex-shrink-0">
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05, duration: 0.4 }} className="inline-flex items-center gap-2 mb-1.5">
@@ -235,7 +223,6 @@ export default function Slide03() {
             style={{ background: `linear-gradient(90deg, ${LT.amber}, transparent)` }} />
         </motion.div>
 
-        {/* 4×2 grid */}
         <div className="flex-1 grid grid-cols-4 grid-rows-2 gap-3 min-h-0" style={{ perspective: "1200px" }}>
           {services.map((svc, i) => (
             <TiltCard key={i} accent={svc.accent} index={i}>
@@ -300,43 +287,46 @@ export default function Slide03() {
         </motion.p>
       </motion.div>
 
-      {/* ── MOBILE layout ── */}
+      {/* ── MOBILE: fully scrollable ── */}
       <motion.div variants={containerVariants} initial="hidden" animate="show"
-        className="md:hidden relative z-10 flex flex-col h-full px-3.5 pt-3 pb-12 overflow-y-auto no-scrollbar"
+        className="md:hidden relative z-10 w-full overflow-y-auto"
+        style={{ WebkitOverflowScrolling: "touch", paddingBottom: "72px" }}
       >
-        {/* Mobile header — compact */}
-        <motion.div variants={headerVariants} className="mb-3 flex-shrink-0">
-          <div className="inline-flex items-center gap-2 mb-1">
-            <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "88" }} />
-            <p className="font-accent uppercase tracking-[6px] font-semibold"
-              style={{ color: LT.amber, fontSize: "10px" }}>What We Offer</p>
+        <div className="flex flex-col px-3.5 pt-3 gap-3">
+          {/* Mobile header */}
+          <motion.div variants={headerVariants}>
+            <div className="inline-flex items-center gap-2 mb-1">
+              <div className="h-[2px] w-5 rounded" style={{ background: LT.amber + "88" }} />
+              <p className="font-accent uppercase tracking-[6px] font-semibold"
+                style={{ color: LT.amber, fontSize: "10px" }}>What We Offer</p>
+            </div>
+            <h2 className="font-display leading-none"
+              style={{ fontSize: "clamp(34px, 11vw, 54px)", color: LT.text }}>
+              OUR{" "}
+              <span style={{ WebkitTextStroke: `2px ${LT.amber}`, color: "transparent" }}>SERVICES</span>
+            </h2>
+            <div className="w-14 h-[3px] rounded-full mt-1.5"
+              style={{ background: `linear-gradient(90deg, ${LT.amber}, transparent)` }} />
+          </motion.div>
+
+          {/* 2×4 mobile grid — natural height, no constraints */}
+          <div className="grid grid-cols-2 gap-2">
+            {services.map((svc, i) => (
+              <MobileCard
+                key={i} svc={svc} index={i}
+                isActive={activeCard === i}
+                onTap={() => setActiveCard(activeCard === i ? null : i)}
+              />
+            ))}
           </div>
-          <h2 className="font-display leading-none"
-            style={{ fontSize: "clamp(34px, 11vw, 54px)", color: LT.text }}>
-            OUR{" "}
-            <span style={{ WebkitTextStroke: `2px ${LT.amber}`, color: "transparent" }}>SERVICES</span>
-          </h2>
-          <div className="w-14 h-[3px] rounded-full mt-1.5"
-            style={{ background: `linear-gradient(90deg, ${LT.amber}, transparent)` }} />
-        </motion.div>
 
-        {/* 2×4 mobile grid */}
-        <div className="grid grid-cols-2 gap-2">
-          {services.map((svc, i) => (
-            <MobileCard
-              key={i} svc={svc} index={i}
-              isActive={activeCard === i}
-              onTap={() => setActiveCard(activeCard === i ? null : i)}
-            />
-          ))}
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            transition={{ delay: services.length * 0.07 + 0.6 }}
+            className="font-body text-center font-medium"
+            style={{ color: LT.textMuted, fontSize: "11px" }}>
+            End-to-end travel solutions for personal, corporate & event transportation
+          </motion.p>
         </div>
-
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-          transition={{ delay: services.length * 0.07 + 0.6 }}
-          className="mt-3 font-body text-center font-medium flex-shrink-0"
-          style={{ color: LT.textMuted, fontSize: "11px" }}>
-          End-to-end travel solutions for personal, corporate & event transportation
-        </motion.p>
       </motion.div>
 
       <AnimatePresence>
