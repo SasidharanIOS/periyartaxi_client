@@ -97,16 +97,6 @@ const userBadge = {
   Driver:   { color: "#dc2626", bg: "#fee2e2", border: "#dc262640" },
 };
 
-const techStack = [
-  { label: "React Native", color: "#2563eb", bg: "#dbeafe" },
-  { label: "Node.js",      color: "#16a34a", bg: "#dcfce7" },
-  { label: "Google Maps",  color: "#dc2626", bg: "#fee2e2" },
-  { label: "Firebase",     color: "#d97706", bg: "#fef3c7" },
-  { label: "Razorpay",     color: "#7c3aed", bg: "#ede9fe" },
-  { label: "MySQL",        color: "#0d9488", bg: "#ccfbf1" },
-  { label: "AWS",          color: "#d97706", bg: "#fff7ed" },
-];
-
 export default function Slide12() {
   return (
     <div
@@ -158,7 +148,6 @@ export default function Slide12() {
             </p>
           </div>
 
-          {/* ✅ FIXED: "& TECH" solid amber instead of transparent stroke */}
           <div className="flex flex-col sm:flex-row sm:items-end gap-2 flex-wrap">
             <h2
               className="font-display leading-none"
@@ -184,7 +173,11 @@ export default function Slide12() {
               </div>
               <div
                 className="flex items-center gap-1.5 rounded-full px-2.5 py-1"
-                style={{ background: LT.surface, border: `1.5px solid ${LT.border}`, boxShadow: LT.shadowMd }}
+                style={{
+                  background: LT.surface,
+                  border: `1.5px solid ${LT.border}`,
+                  boxShadow: LT.shadowMd,
+                }}
               >
                 <FaApple style={{ color: LT.text }} size={13} />
                 <span
@@ -310,93 +303,6 @@ export default function Slide12() {
             );
           })}
         </div>
-
-        {/* ── Tech Stack Strip ── */}
-        <motion.div
-          variants={item}
-          className="flex-shrink-0 rounded-xl"
-          style={{
-            background: LT.surface,
-            border: `1.5px solid ${LT.amber}22`,
-            boxShadow: LT.shadowMd,
-          }}
-        >
-          {/* ✅ MOBILE: horizontal scroll row, hidden on md+ */}
-          <div
-            className="flex md:hidden items-center gap-0 overflow-x-auto no-scrollbar"
-            style={{
-              padding: "clamp(8px,1.2vw,14px) clamp(10px,1.5vw,16px)",
-              WebkitOverflowScrolling: "touch",
-            }}
-          >
-            {/* "Tech Stack:" label pinned left */}
-            <div
-              className="flex items-center gap-2 flex-shrink-0 mr-3"
-              style={{
-                paddingRight: 10,
-                borderRight: `1.5px solid ${LT.amber}30`,
-              }}
-            >
-              <div className="w-4 h-[2px] rounded" style={{ background: LT.amber + "80" }} />
-              <span
-                className="font-body font-bold uppercase tracking-widest whitespace-nowrap"
-                style={{ fontSize: "clamp(9px,2.5vw,12px)", color: LT.textMuted }}
-              >
-                Tech Stack
-              </span>
-            </div>
-            {/* Scrollable chips */}
-            <div className="flex items-center gap-2 flex-shrink-0">
-              {techStack.map((t) => (
-                <span
-                  key={t.label}
-                  className="px-3 py-1.5 rounded-full font-body font-semibold whitespace-nowrap flex-shrink-0"
-                  style={{
-                    fontSize: "clamp(10px,2.8vw,13px)",
-                    background: t.bg,
-                    border: `1.5px solid ${t.color}40`,
-                    color: t.color,
-                    boxShadow: `0 2px 8px ${t.color}20`,
-                  }}
-                >
-                  {t.label}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* ✅ DESKTOP: original flex-wrap layout, hidden below md */}
-          <div
-            className="hidden md:flex flex-wrap items-center gap-1.5"
-            style={{
-              padding: "clamp(8px,1.2vw,14px) clamp(12px,1.5vw,20px)",
-            }}
-          >
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <div className="w-4 h-[2px] rounded" style={{ background: LT.amber + "80" }} />
-              <span
-                className="font-body font-bold uppercase tracking-widest"
-                style={{ fontSize: "clamp(9px,1vw,12px)", color: LT.textMuted }}
-              >
-                Tech Stack:
-              </span>
-            </div>
-            {techStack.map((t) => (
-              <span
-                key={t.label}
-                className="px-2.5 py-1 rounded-full font-body font-semibold"
-                style={{
-                  fontSize: "clamp(9px,1vw,12px)",
-                  background: t.bg,
-                  border: `1px solid ${t.color}30`,
-                  color: t.color,
-                }}
-              >
-                {t.label}
-              </span>
-            ))}
-          </div>
-        </motion.div>
       </motion.div>
     </div>
   );
